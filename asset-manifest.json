@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/group9-ase-project/static/css/main.0c663fa8.css",
+    "main.js": "/group9-ase-project/static/js/main.9ea4f823.js",
+    "static/media/queen.svg": "/group9-ase-project/static/media/queen.cf388bf415c0d33ec16f23593b8d0d91.svg",
+    "index.html": "/group9-ase-project/index.html",
+    "main.0c663fa8.css.map": "/group9-ase-project/static/css/main.0c663fa8.css.map",
+    "main.9ea4f823.js.map": "/group9-ase-project/static/js/main.9ea4f823.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0c663fa8.css",
+    "static/js/main.9ea4f823.js"
+  ]
+}
