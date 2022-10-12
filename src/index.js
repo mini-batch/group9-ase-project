@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import { HashRouter as Router, Route, Routes} from "react-router-dom";
 import {
     Navigation,
     NQueens,
@@ -13,8 +13,8 @@ root.render(
     <Router>
         <Navigation />
         <Routes>
-            <Route path="/group9-ase-project" element={<Home />} />
-            <Route path="/n-queens-problem" element={<NQueens />} />
+            <Route path={process.env.PUBLIC_URL + '/n-queens-problem'} element={<NQueens />} />
+            <Route path={process.env.PUBLIC_URL + '/'} element={<Home />} />
         </Routes>
     </Router>
 );
