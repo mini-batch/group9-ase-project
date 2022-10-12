@@ -1,0 +1,48 @@
+h1 {
+    padding-inline: 20px;
+}
+
+input {
+    margin-right: 2px;
+}
+
+.square {
+    display: flex;
+    width: 100px;
+    height: 100px;
+    float: left;
+}
+
+.black {
+    background-color: rgb(90, 57, 57);
+}
+
+.white {
+    background-color: white;
+}
+
+.black img {
+    width: 100%;
+    height: 100%;
+}
+
+.white img {
+    width: 100%;
+    height: 100%;
+}
+
+.chess {
+    margin-top: 0px;
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.boardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
