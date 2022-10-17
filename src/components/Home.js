@@ -7,7 +7,7 @@ function Home() {
             <div className="container">
                 <div className="row align-items-center">
                     <h1>
-                        Hello
+                        Test
                     </h1>
                 </div>
             </div>
