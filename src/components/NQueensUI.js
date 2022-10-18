@@ -33,6 +33,7 @@ function NQueens() {
 
     function onLoadButtonClick (positionInput) {
         destroyQueens();
+        setWarningIndicator(false);
         //Input validation to ensure the same number isn't inserted twice
         for(let i=0;i<positionInput.length;i++)
          {
