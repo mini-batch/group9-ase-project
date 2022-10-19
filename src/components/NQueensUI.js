@@ -33,6 +33,17 @@ function NQueens() {
 
     function onLoadButtonClick (positionInput) {
         destroyQueens();
+        setWarningIndicator(false);
+        //Input validation to ensure the same number isn't inserted twice
+        for(let i=0;i<positionInput.length;i++)
+         {
+            for(let j=i+1;j<positionInput.length;j++)
+            {
+                if(positionInput[i]===positionInput[j])
+                 setWarningIndicator(true);
+            }
+         }
+
         let solution = GetSolutionBruteForce(size, positionInput);
         if (solution === -1) {
             setWarningIndicator(true);
@@ -83,8 +94,24 @@ function NQueens() {
         setBoard(b);
     }
 
+    function positionInputValue(length)
+     {
+        let inputValue = "";
+        if(length===0)
+         {
+            return inputValue;
+         }
+        for(let i=0;i<length-1;i++)
+         {
+            inputValue=inputValue + "-1,";
+         }
+         inputValue=inputValue + "-1";
+         return inputValue;
+     }
+
     useEffect(() => {
         drawBoard(size);
+        document.getElementById("positionInputBox").value = positionInputValue(size);
         destroyQueens();
     },[size])
 
@@ -97,7 +124,7 @@ function NQueens() {
                     </h1>
                     <input type="number" placeholder="Number of squares" onChange={(e) => setSize(checkInput(e.target.value))}></input>
                     <form id="positionInputForm">
-                        <input name="positionInputBox" placeholder="Position (e.g. -1,-1,0,2)" type="text" ></input>
+                        <input id="positionInputBox" name="positionInputBox" placeholder="Position (e.g. -1,-1,0,2)" type="text" ></input>
                         <button type="button" onClick={() => onLoadButtonClick(JSON.parse("[" + document.getElementById("positionInputForm").positionInputBox.value + "]"))} >Load</button>
                     </form>
                 </div>
