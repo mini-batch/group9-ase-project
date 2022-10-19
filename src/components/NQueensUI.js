@@ -35,7 +35,7 @@ function NQueens() {
         destroyQueens();
         setWarningIndicator(false);
         //Input validation to ensure the same number isn't inserted twice
-        for(let i=0;i<positionInput.length;i++)
+        for(let i=0;i<positionIndhasidahsdibwibput.length;i++)
          {
             for(let j=i+1;j<positionInput.length;j++)
             {
