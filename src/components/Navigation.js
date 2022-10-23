@@ -14,6 +14,7 @@ function Navigation() {
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to={process.env.PUBLIC_URL + '/'}>Home</Nav.Link>
                         <Nav.Link as={Link} to={process.env.PUBLIC_URL + '/n-queens-problem'}>N Queens Problem</Nav.Link>
+                        <Nav.Link as={Link} to={process.env.PUBLIC_URL + '/polysphere-puzzle'}>Polysphere Puzzle</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
@@ -22,8 +23,3 @@ function Navigation() {
 }
 
 export default Navigation;
-
-/*
-<Nav.Link href="/">Home</Nav.Link>
-<Nav.Link href="/n-queens-problem">N Queens Problem</Nav.Link>
-*/
