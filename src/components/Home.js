@@ -7,8 +7,18 @@ function Home() {
             <div className="container">
                 <div className="row align-items-center">
                     <h1>
-                        Test
+                        Group 9 Home Page
                     </h1>
+                </div>
+                <div className="row pt-4">
+                    <h2>
+                        Group Members:
+                    </h2>
+                </div>
+                <div className="row align-items-center">
+                    <p>
+                        Arjun Yohann Joshua, Bhavik Pandya, David Hugh Batchelder, Gavin Yan, Haoran Tang, Yisong Liu
+                    </p>
                 </div>
             </div>
         </div>
