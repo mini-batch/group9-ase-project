@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Shape } from "./Logic/PolysphereLogic/Shape.js";
 import { A } from "./Logic/PolysphereLogic/Shapes.js";
-
+import { solve, sets, items } from "./Logic/PolysphereLogic/Solver.js";
 
 function Polysphere() {
-
     function onLoadButtonClick() {
-        console.log(A.layout);
+        for (let i of solve(sets, items)) {
+            console.log(i)
+        }
     };
 
     return (
@@ -15,7 +17,6 @@ function Polysphere() {
                     <h1>
                         Polysphere Puzzle
                     </h1>
-                    <input type="number" placeholder="Number of squares"></input>
                     <button type="button" onClick={() => onLoadButtonClick()}>Load</button>
                 </div>
             </div>

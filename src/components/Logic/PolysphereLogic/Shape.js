@@ -8,8 +8,10 @@ export class Shape {
         if (this.layout.length !== other_shape_layout.length) {
             return false;
         } else {
+            let other_layout = JSON.stringify(other_shape_layout);
             for (let i = 0; i < this.layout.length; i++) {
-                if (this.layout[i] in other_shape_layout) {
+                let element = JSON.stringify(this.layout[i]);
+                if (other_layout.indexOf(element) !== -1) {
                     continue;
                 } else {
                     return false
@@ -24,7 +26,7 @@ export class Shape {
         let col_change = 0;
         for (let i = 0; i < this.layout.length; i++) {
             let new_row = this.layout[i][1];
-            let new_col = this.layout[i][0];
+            let new_col = -this.layout[i][0];
             this.layout[i] = [new_row, new_col]
             if (new_row < 0 && new_row < row_change) {
                 row_change = new_row;
