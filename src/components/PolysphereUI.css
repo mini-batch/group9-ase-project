@@ -1,0 +1,107 @@
+h1 {
+    padding-inline: 20px;
+}
+
+.space {
+    width: 100%;
+    height: 100px;
+}
+
+.inBoardInput {
+    width: 50px;
+}
+
+.inBoardSquareContainer  {
+    display: flex;
+    width: 10px;
+    height: 10px;
+    float: left;
+    outline-style: solid;
+    outline-width: thick;
+    outline-color: black;
+    background-color: white;
+}
+
+.square {
+    display: flex;
+    width: 50px;
+    height: 50px;
+    float: left;
+    outline-style: solid;
+    outline-width: thick;
+    outline-color: black;
+    background-color: white;
+}
+
+.black {
+    background-color: black;
+}
+
+.A {
+    background-color: rgb(212, 11, 11);
+}
+
+.B {
+    background-color: rgb(194, 99, 186);
+}
+
+.C {
+    background-color: rgb(199, 139, 194);
+}
+
+.D {
+    background-color: rgb(20, 119, 211);
+}
+
+.E {
+    background-color: rgb(203, 216, 18);
+}
+
+.F {
+    background-color: rgb(82, 45, 79);
+}
+
+.G {
+    background-color: rgb(39, 7, 36);
+}
+
+.H {
+    background-color: rgb(97, 216, 93);
+}
+
+.I {
+    background-color: rgb(218, 84, 22);
+}
+
+.J {
+    background-color: rgb(8, 77, 11);
+}
+
+.K {
+    background-color: rgb(197, 139, 14);
+}
+
+.L {
+    background-color: rgb(102, 186, 243);
+}
+
+.board {
+    margin-top: 50px;
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.boardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    width: 550px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
