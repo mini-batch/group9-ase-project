@@ -37,7 +37,7 @@ let shapes = [A, B, C, D, E, F, G, H, I, J, K, L];
 function populate_problem_matrix() {
     let problem_matrix = [];
     for (let shape of shapes) {
-        console.log(shape.name);
+        //console.log(shape.name);
         let starting_pos_store = [];
         let rotation_count = 0;
         while (true) {
@@ -51,7 +51,7 @@ function populate_problem_matrix() {
                 starting_pos_store.push(shape.layout);
                 for (let row = 0; row < 5; row++) {
                     let place_count = 0;
-                    console.log("Row: " + row.toString());
+                    //console.log("Row: " + row.toString());
                     if (shape.translate(row, 0)) {
                         for (let col = 0; col < 11; col++) {
                             if (col === 0) {
@@ -64,7 +64,7 @@ function populate_problem_matrix() {
                                     shape.reset_coord();
                                 }
                             } else {
-                                console.log(place_count);
+                                //console.log(place_count);
                                 shape.reset_coord();
                                 break;
                             }
@@ -75,19 +75,19 @@ function populate_problem_matrix() {
             if (rotation_count < 4) {
                 shape.rotate();
                 rotation_count += 1;
-                console.log(shape.layout);
-                console.log("Rotation: " + rotation_count.toString());
+                //console.log(shape.layout);
+                //console.log("Rotation: " + rotation_count.toString());
             } else if (rotation_count === 4) {
                 shape.flip();
-                console.log(shape.layout);
+                //console.log(shape.layout);
                 rotation_count += 1;
-                console.log("Flip");
+                //console.log("Flip");
             } else if (rotation_count > 4 && rotation_count < 8) {
                 shape.rotate();
-                console.log("Rotation: " + rotation_count.toString());
+                //console.log("Rotation: " + rotation_count.toString());
                 rotation_count += 1;
             } else {
-                console.log("Size: " + problem_matrix.length.toString());
+                //console.log("Size: " + problem_matrix.length.toString());
                 break;
             }
         }
@@ -121,7 +121,7 @@ function reduce_problem_matrix (problem_matrix, problem_headers, shapes_used, sq
             used_cols.push(problem_headers.indexOf(square));
         }
     }
-    console.log(used_cols);
+    //console.log(used_cols);
     let used_cols_sorted = new Uint8Array(used_cols);
     used_cols_sorted = used_cols_sorted.sort();
     used_cols_sorted = used_cols_sorted.reverse();

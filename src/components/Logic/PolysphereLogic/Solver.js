@@ -20,6 +20,7 @@ let sets = {
 
 // X is an object which has columns as keys, each key has as value which is the set of rows corresponding to the 1s in the column
 // Y is an object which has rows as keys, each key has a value which is a set columns which are 1 in that row
+// Code adapted from Ali Assaf liscensed under GNU General Public License: https://www.cs.mcgill.ca/~aassaf9/python/sudoku.txt 
 function* solve(X, Y, solution=[]) { 
     if (Object.keys(X).length === 0) {
         // No columns left in X, hence valid solution
