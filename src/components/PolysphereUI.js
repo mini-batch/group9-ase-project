@@ -6,6 +6,23 @@ import { solve, sets, items } from "./Logic/PolysphereLogic/Solver.js";
 import "./PolysphereUI.css";
 import Legend from '../Images/ShapeLegend.png';
 
+const FPS = 144;
+let uiTimer = null;
+const createTimer = (func) => {
+    if (uiTimer) {
+        clearInterval(uiTimer);
+        uiTimer = null;
+    }
+
+    uiTimer = setInterval(() => {
+        func();
+    }, 1000 / FPS);
+}
+
+window.onbeforeunload = () => {
+    if (uiTimer) clearTimeout(uiTimer);
+}
+
 function Polysphere() {
     document.body.style.backgroundColor = 'rgba(182, 122, 11, 0.342)';
     const [inBoard, setInBoard] = useState(drawInBoard())
@@ -110,59 +127,41 @@ function Polysphere() {
         drawOutBoard();
     };
 
-
+    let input;
+    let input_shapes;
+    let input_squares;
+    let problem_mat;
+    let problem_def;
+    let headers;
+    let dicts;
     function onSolveButtonClick() {
         setSolutionCount(0);
         setSolutions([]);
         //stopExecution.current = false;
         console.log(convert_inBoard_to_arrays());
-        let input = convert_inBoard_to_arrays();
-        let input_shapes = input[0];
-        let input_squares = input[1];
-        let problem_mat = populate_problem_matrix();
-        let problem_def = reduce_problem_matrix(problem_mat, generate_headers(problem_mat), input_shapes, input_squares);
+        input = convert_inBoard_to_arrays();
+        input_shapes = input[0];
+        input_squares = input[1];
+        problem_mat = populate_problem_matrix();
+        problem_def = reduce_problem_matrix(problem_mat, generate_headers(problem_mat), input_shapes, input_squares);
         problem_mat = problem_def[0];
-        let headers = problem_def[1];
-        let dicts = create_dicts(problem_mat, headers);
-        let count = 0;
-        const solution_gen = solve(dicts[0], dicts[1]);
-        /*
-        while (true) {
-            console.log(stopExecution.current);
-            if (stopExecution.current) {
-                break;
+        headers = problem_def[1];
+        dicts = create_dicts(problem_mat, headers);
+        let ret = solve(dicts[0], dicts[1]);
+        let cnt = 0;
+        createTimer(() => {
+            let arr = ret.next().value;
+            if (!arr) {
+                clearInterval(uiTimer);
+                uiTimer = null;
+                console.log('done');
+                return;
             }
-            console.log(solution_gen.next());
-            if (count === 500) {
-                break;
-            }
-            count += 1;
-        }*/
-        
-        while(true) {
-            let out = solution_gen.next()
-            if (out.done) {
-                break;
-            } else {
-                count += 1;
-                setSolutionCount(count);
-                setSolutions(oldArray => [...oldArray,convert_to_5x11(out.value, problem_mat, headers, input_shapes, input_squares)]);
-            }
-        }
-        /*
-        for (let i of solve(dicts[0], dicts[1])) {
-            count += 1;
-            setSolutionCount(count);
-            setSolutions(oldArray => [...oldArray,convert_to_5x11(i, problem_mat, headers, input_shapes, input_squares)]);
-            //if (stopExecution.current) {
-             //   break;
-            //}            
-            if (count === 10) {
-                //break;
-            }
-            console.log(count);
-        }*/
-        console.log("Fin");
+            cnt++;
+            setSolutionCount(cnt);
+            setSolutions(oldArray => [...oldArray,convert_to_5x11(arr, problem_mat, headers, input_shapes, input_squares)]);
+            drawPosition(convert_to_5x11(arr, problem_mat, headers, input_shapes, input_squares));
+        });
     };
 
     function onNextButtonClick() {
