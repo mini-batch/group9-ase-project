@@ -6,7 +6,7 @@ input {
     margin-right: 2px;
 }
 
-.square {
+.chessSquare {
     display: flex;
     width: 100px;
     height: 100px;
@@ -40,7 +40,7 @@ input {
     justify-content: center;
 }
 
-.boardContainer {
+.boardContainerChess {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

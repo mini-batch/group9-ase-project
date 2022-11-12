@@ -55,7 +55,7 @@ function NQueens() {
     }
 
     const boardContainerSetWidth = {
-        class:"boardContainer",
+        class:"boardContainerChess",
         width: size * 100,
     }
 
@@ -71,21 +71,21 @@ function NQueens() {
                 if (i % 2 === 0) {
                     if (j % 2 === 0) {
                         //white
-                        row.push(<div id={j + i * boardSize} className="square white" key={j + i * boardSize}></div>)
+                        row.push(<div id={j + i * boardSize} className="chessSquare white" key={j + i * boardSize}></div>)
                     } 
                     else {
                         //black
-                        row.push(<div id={j + i * boardSize} className="square black" key={j + i * boardSize}></div>)
+                        row.push(<div id={j + i * boardSize} className="chessSquare black" key={j + i * boardSize}></div>)
                     }
                 }
                 else {
                     if (j % 2 === 0) {
                         //black
-                        row.push(<div id={j + i * boardSize} className="square black" key={j + i * boardSize}></div>)
+                        row.push(<div id={j + i * boardSize} className="chessSquare black" key={j + i * boardSize}></div>)
                     }
                     else {
                         //white
-                        row.push(<div id={j + i * boardSize} className="square white" key={j + i * boardSize}></div>)
+                        row.push(<div id={j + i * boardSize} className="chessSquare white" key={j + i * boardSize}></div>)
                     }
                 }
             }
