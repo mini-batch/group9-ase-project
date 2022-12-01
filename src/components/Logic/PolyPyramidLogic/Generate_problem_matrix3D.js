@@ -137,7 +137,7 @@ export function get_diag_slices() {
 let diag_slices = get_diag_slices();
 
 
-export function convert_rect_coords_to_diags(shape_layout, size) { // FIX 
+export function convert_rect_coords_to_diags(shape_layout, size) {
     let out = new Array();
     if (size !== 5) {
         let out = new Array(4);
@@ -171,14 +171,13 @@ export function convert_rect_coords_to_diags(shape_layout, size) { // FIX
 function add_row_for_diags_if_valid(problem_mat, shape, size) {
     // Check if contained within triangle
     for (let coord of shape.layout) {
-        if (coord[0] < coord[1]) {
+        if (coord[0] > coord[1]) {
             return false;
         }
     }
     let placement_layouts = convert_rect_coords_to_diags(shape.layout, size);
     for (let layout of placement_layouts) {
-        console.log(layout);
-        console.log(problem_mat.push(shape_to_row(new Shape3D(shape.name, layout))));
+        problem_mat.push(shape_to_row(new Shape3D(shape.name, layout)));
     }
     return true;
 }
@@ -260,9 +259,9 @@ export function add_rows_for_shape_in_horizontal_and_vertical_slices(prob_mat, s
 }
 
 
-export function populate_problem_matrix3D() { // EDIT TO MAKE USEABLE FOR PYRAMID LAYOUT
+export function populate_problem_matrix3D() {
     let problem_matrix = [];
-    for (let shape of shapes.slice(0,1)) {
+    for (let shape of shapes) {
         add_rows_for_shape_in_horizontal_and_vertical_slices(problem_matrix, shape);
     }
     return problem_matrix;
