@@ -3,6 +3,7 @@ import { create_dicts } from "./Logic/PolysphereLogic/Create_dict_objects.js";
 import { convert_to_5x11 } from "./Logic/PolysphereLogic/Create_solution.js";
 import { generate_headers, populate_problem_matrix, reduce_problem_matrix } from "./Logic/PolysphereLogic/Generate_problem_matrix.js";
 import { solve, sets, items } from "./Logic/PolysphereLogic/Solver.js";
+import { A } from "./Logic/PolysphereLogic/Shapes.js";
 import "./PolysphereUI.css";
 import Legend from '../Images/ShapeLegend.png';
 
@@ -163,20 +164,20 @@ function Polysphere() {
             drawPosition(convert_to_5x11(arr, problem_mat, headers, input_shapes, input_squares));
         });
     };
-
-    function onNextButtonClick() {
-        drawPosition(solutions.pop());
-    }
-
     function onClearButtonClick() {
         setSolutions([]);
         setSolutionCount(0);
         clearPosition();
     };
 
+
     function onStopButtonClick() {
         stopExecution.current = true;
+        console.log(stopExecution.current);
+        clearInterval(uiTimer);
+        uiTimer = null;
     }
+
 
     return (
         <div className="home">
@@ -185,25 +186,32 @@ function Polysphere() {
                     <h1>
                         Polysphere Puzzle
                     </h1>
-                    <form id="positionInputForm" style={{paddingTop:"10px"}}>
-                        <button type="button" onClick={() => onSolveButtonClick()}>Solve</button>
-                        <button type="button" onClick={() => onNextButtonClick()}>Display Next</button>
+                    <form id="positionInputForm"style={{paddingTop:"10px"}}>
+                        <p>
+                            Example input: Shape A in top left corner, shape K in top right.<br></br>
+                            Used Shapes = "A, K", Used Squares = "[0,0; 0,1; 0,2; 1,0; 1,2], [0,9; 0,10; 1,10]"
+                        </p>
+                        <input id="usedShapeInputBox" name="usedShapeInputBox" placeholder="Used Shapes" type="text" ></input>
+                        <input id="usedSquaresInputBox" name="usedSquaresInputBox" placeholder="Used Squares" type="text" ></input>
+                        <button type="button" onClick={() => onSolveButtonClick(document.getElementById("usedShapeInputBox").value, document.getElementById("usedSquaresInputBox").value)}>Solve</button>
                         <button type="button" onClick={() => onClearButtonClick()}>Clear</button>
-                        <button type="button" disabled onClick={() => onStopButtonClick()}>Stop</button>
+                        <button type="button" onClick={() => onStopButtonClick()}>Stop</button>
                         <p>Number of solutions: {solutionCount}</p>
                     </form>
-                </div>
+                    </div>
                 <div className="row align-items-center justify-content-center pt-1" id="legend">
                     <img src={Legend} style={{width:"40%"}}></img>
-                </div>
+                    </div>
             </div>
             <div className="container-fluid">
                 <div className="row board">
                     <div className="boardContainer">
-                            {inBoard}
+                        {inBoard}
                     </div>
-                    <div className="boardContainer">
-                            {outBoard}
+                </div>
+                <div className="row board">
+                    <div id="resultBoard" className="boardContainer">
+                        {outBoard}
                     </div>
                 </div>
             </div>
