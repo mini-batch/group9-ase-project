@@ -3,7 +3,6 @@ import { create_dicts } from "./Logic/PolysphereLogic/Create_dict_objects.js";
 import { convert_to_5x11 } from "./Logic/PolysphereLogic/Create_solution.js";
 import { generate_headers, populate_problem_matrix, reduce_problem_matrix } from "./Logic/PolysphereLogic/Generate_problem_matrix.js";
 import { solve, sets, items } from "./Logic/PolysphereLogic/Solver.js";
-import { A } from "./Logic/PolysphereLogic/Shapes.js";
 import "./PolysphereUI.css";
 import Legend from '../Images/ShapeLegend.png';
 
@@ -124,9 +123,9 @@ function Polysphere() {
         return b;
     }
 
-    function onLoadButtonClick() {
-        drawOutBoard();
-    };
+    function onNextButtonClick() {
+        drawPosition(solutions.pop());
+    }
 
     let input;
     let input_shapes;
@@ -187,15 +186,10 @@ function Polysphere() {
                         Polysphere Puzzle
                     </h1>
                     <form id="positionInputForm"style={{paddingTop:"10px"}}>
-                        <p>
-                            Example input: Shape A in top left corner, shape K in top right.<br></br>
-                            Used Shapes = "A, K", Used Squares = "[0,0; 0,1; 0,2; 1,0; 1,2], [0,9; 0,10; 1,10]"
-                        </p>
-                        <input id="usedShapeInputBox" name="usedShapeInputBox" placeholder="Used Shapes" type="text" ></input>
-                        <input id="usedSquaresInputBox" name="usedSquaresInputBox" placeholder="Used Squares" type="text" ></input>
-                        <button type="button" onClick={() => onSolveButtonClick(document.getElementById("usedShapeInputBox").value, document.getElementById("usedSquaresInputBox").value)}>Solve</button>
+                        <button type="button" onClick={() => onSolveButtonClick()}>Solve</button>
                         <button type="button" onClick={() => onClearButtonClick()}>Clear</button>
                         <button type="button" onClick={() => onStopButtonClick()}>Stop</button>
+                        <button type="button" onClick={() => onNextButtonClick()}>Display Next</button>
                         <p>Number of solutions: {solutionCount}</p>
                     </form>
                     </div>
