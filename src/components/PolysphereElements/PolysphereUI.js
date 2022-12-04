@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { create_dicts } from "./Logic/PolysphereLogic/Create_dict_objects.js";
-import { convert_to_5x11 } from "./Logic/PolysphereLogic/Create_solution.js";
-import { generate_headers, populate_problem_matrix, reduce_problem_matrix } from "./Logic/PolysphereLogic/Generate_problem_matrix.js";
-import { solve, sets, items } from "./Logic/PolysphereLogic/Solver.js";
+import { create_dicts } from "../Logic/PolysphereLogic/Create_dict_objects.js";
+import { convert_to_5x11 } from "../Logic/PolysphereLogic/Create_solution.js";
+import { generate_headers, populate_problem_matrix, reduce_problem_matrix } from "../Logic/PolysphereLogic/Generate_problem_matrix.js";
+import { solve, sets, items } from "../Logic/PolysphereLogic/Solver.js";
 import "./PolysphereUI.css";
-import Legend from '../Images/ShapeLegend.png';
+import Legend from '../../Images/ShapeLegend.png';
 
 const FPS = 144;
 let uiTimer = null;
