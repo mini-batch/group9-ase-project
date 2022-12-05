@@ -3,7 +3,7 @@ import "./PolyPyramidUI.css";
 import Scene from "./PolyPyramidScene"
 import Pyramid from './Pyramid'
 import { convert_to_pyramid_layers } from "../Logic/PolyPyramidLogic/ConvertSolutionFormat";
-import { generate_headers, populate_problem_matrix3D } from "../Logic/PolyPyramidLogic/Generate_problem_matrix3D";
+import { generate_headers, populate_problem_matrix3D, reduce_problem_matrix } from "../Logic/PolyPyramidLogic/Generate_problem_matrix3D";
 import { create_dicts } from "../Logic/PolysphereLogic/Create_dict_objects";
 import { solve } from "../Logic/PolysphereLogic/Solver";
 
@@ -111,7 +111,7 @@ class PolyPyramid extends React.Component {
         this.state = {
             stopExecution: false,
             solutionCount: 0,
-            solutions: [],
+            solutions: []
         }
     }
 
@@ -143,14 +143,14 @@ class PolyPyramid extends React.Component {
         })
         //console.log(convert_inBoard_to_arrays());
         //input = convert_inBoard_to_arrays();
-        input = [[],[]];
+        input = [["A"],[[[0,0,4],[1,1,3],[2,2,2],[2,2,1],[0,0,3]]]];
         input_shapes = input[0];
         input_squares = input[1];
         problem_mat = populate_problem_matrix3D();
-        //problem_def = reduce_problem_matrix(problem_mat, generate_headers(problem_mat), input_shapes, input_squares);
-        //problem_mat = problem_def[0];
-        //headers = problem_def[1];
-        headers = generate_headers(problem_mat);
+        problem_def = reduce_problem_matrix(problem_mat, generate_headers(problem_mat), input_shapes, input_squares);
+        problem_mat = problem_def[0];
+        headers = problem_def[1];
+        //headers = generate_headers(problem_mat);
         dicts = create_dicts(problem_mat, headers);
         let ret = solve(dicts[0], dicts[1]);
         let cnt = 0;

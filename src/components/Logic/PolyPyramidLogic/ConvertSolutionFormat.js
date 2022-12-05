@@ -19,8 +19,9 @@ function convert_to_pyramid_layers(solution, problem_matrix, mat_header, start_s
     for (let i = 0; i < start_shapes.length; i++) {
         let shape = start_shapes[i];
         for (let j = 0; j < start_squares[i].length; j++) {
-            let coord = start_squares[i][j].split(",");
-            out_mat[parseInt(coord[2])][parseInt(coord[0])][parseInt(coord[1])] = shape;
+            //console.log(start_squares[i][j]);
+            let coord = start_squares[i][j];
+            out_mat[coord[2]][coord[0]][coord[1]] = shape;
         }
     }
     for (let i = 0; i < solution.length; i++) {
@@ -31,12 +32,9 @@ function convert_to_pyramid_layers(solution, problem_matrix, mat_header, start_s
                 continue;
             } else if(j < num_unused_shapes) {
                 shape = mat_header[j];
-                console.log(shape);
             } else {
                 let coord = mat_header[j].split(",");
-                console.log(coord);
                 out_mat[parseInt(coord[2])][parseInt(coord[0])][parseInt(coord[1])] = shape;
-                console.log(out_mat[parseInt(coord[2])][parseInt(coord[0])]);
             }
         }
     }

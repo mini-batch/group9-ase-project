@@ -266,3 +266,37 @@ export function populate_problem_matrix3D() {
     }
     return problem_matrix;
 }
+
+// Function to remove columns and rows corresponding to a given starting position: shapes_used = array with shape letters, squares_used = array of array of square coords.
+// problem_matrix and problem_headers are produced from assuming empty starting position
+export function reduce_problem_matrix (problem_matrix, problem_headers, shapes_used, squares_used) {
+    let used_cols = []
+    for (let shape of shapes_used) {
+        used_cols.push(shape_cols[shape]);
+    }
+    for (let squares of squares_used) {
+        for (let square of squares) {
+            used_cols.push(problem_headers.indexOf(square.toString()));
+        }
+    }
+    //console.log(used_cols);
+    let used_cols_sorted = new Uint8Array(used_cols);
+    used_cols_sorted = used_cols_sorted.sort();
+    used_cols_sorted = used_cols_sorted.reverse();
+    for (let i = problem_matrix.length - 1; i >= 0; i--) {
+        for (let j of used_cols_sorted) {
+            if (problem_matrix[i][j] && used_cols_sorted.includes(j)) {
+                // If row has 1 in used column, remove row from matrix
+                problem_matrix.splice(i, 1);
+                break;
+            } else if (used_cols_sorted.includes(j)) {
+                // If column is used, remove column from row
+                problem_matrix[i].splice(j, 1);
+            }
+        }
+    }
+    for (let i of used_cols_sorted) {
+        problem_headers.splice(i, 1);
+    }
+    return [problem_matrix, problem_headers]
+}
