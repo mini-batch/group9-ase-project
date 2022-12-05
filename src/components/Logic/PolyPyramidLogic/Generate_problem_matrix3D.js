@@ -62,7 +62,7 @@ export function generate_headers () {
     for (let z = 0; z < 5; z++) {
         for (let i = 0; i < 5 - z; i++) {
             for (let j = 0; j < 5 - z; j++) {
-                headers.push(" (" + i.toString() + "," + j.toString() + "," + z.toString() + ") ");
+                headers.push(i.toString() + "," + j.toString() + "," + z.toString());
             }
         }
     }
