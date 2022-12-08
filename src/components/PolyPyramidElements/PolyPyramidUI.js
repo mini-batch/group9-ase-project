@@ -253,35 +253,43 @@ export class PolyPyramid extends React.Component {
                     <div ref={this.panel} className="panel">
                     </div>
                 </div>
-                <form id="positionInputForm" style={{ paddingBottom: "4px" }}>
-                    <button type="button" onClick={() => this.onSolveButtonClick()}>Solve</button>
-                    <button type="button" onClick={() => this.onNextButtonClick()}>Display Next</button>
-                    <button type="button" onClick={() => this.onClearButtonClick()}>Clear</button>
-                    <button type="button" onClick={() => this.onStopButtonClick()}>Stop</button>
-                </form>
-                <label htmlFor="inputShape">Shape</label>
-                <input ref={this.inputRef.shape} id="inputShape" type="text"
-                    onKeyUp={(e) => { e.target.value = e.target.value.replace(/[^A-La-l]/g, '').toUpperCase(); }} defaultValue="A">
-                </input>
+                <div className="container" style={{paddingTop:"10px"}}>
+                    <div className="row">
+                        <div className="col">
+                            <form id="positionInputForm" style={{ paddingBottom: "4px" }}>
+                                <button type="button" style={{marginLeft: "3px", marginRight:"3px"}} onClick={() => this.onSolveButtonClick()}>Solve</button>
+                                <button type="button" style={{marginLeft: "3px", marginRight:"3px"}} onClick={() => this.onNextButtonClick()}>Display Next</button>
+                                <button type="button" style={{marginLeft: "3px", marginRight:"3px"}} onClick={() => this.onClearButtonClick()}>Clear</button>
+                                <button type="button" style={{marginLeft: "3px", marginRight:"3px"}} onClick={() => this.onStopButtonClick()}>Stop</button>
+                            </form>
+                            <label htmlFor="inputShape" style={{paddingRight:"3px"}}>Shape</label>
+                            <input ref={this.inputRef.shape} id="inputShape" type="text"
+                                onKeyUp={(e) => { e.target.value = e.target.value.replace(/[^A-La-l]/g, '').toUpperCase(); }} defaultValue="A">
+                            </input>
 
-                <p>Number of solutions: {this.state.solutionCount}</p>
-                <input id="l1" type="checkbox" defaultChecked
-                    onChange={(e) => layerVisible(1, e.target.checked)} />
-                <label htmlFor="l1">1</label>
-                <input id="l2" type="checkbox" defaultChecked
-                    onChange={(e) => layerVisible(2, e.target.checked)} />
-                <label htmlFor="l2">2</label>
-                <input id="l3" type="checkbox" defaultChecked
-                    onChange={(e) => layerVisible(3, e.target.checked)} />
-                <label htmlFor="l3">3</label>
-                <input id="l4" type="checkbox" defaultChecked
-                    onChange={(e) => layerVisible(4, e.target.checked)} />
-                <label htmlFor="l4">4</label>
-                <input id="l5" type="checkbox" defaultChecked
-                    onChange={(e) => layerVisible(5, e.target.checked)} />
-                <label htmlFor="l5">5</label>
-                <div className="row justify-content-left pt-1" id="legend" style={{ paddingLeft: "20px" }}>
-                    <img src={Legend} style={{width:"19%"}}></img>
+                            <p>Number of solutions: {this.state.solutionCount}</p>
+                            <input id="l1" type="checkbox" defaultChecked
+                                onChange={(e) => layerVisible(1, e.target.checked)} />
+                            <label htmlFor="l1">1</label>
+                            <input id="l2" type="checkbox" defaultChecked
+                                onChange={(e) => layerVisible(2, e.target.checked)} />
+                            <label htmlFor="l2">2</label>
+                            <input id="l3" type="checkbox" defaultChecked
+                                onChange={(e) => layerVisible(3, e.target.checked)} />
+                            <label htmlFor="l3">3</label>
+                            <input id="l4" type="checkbox" defaultChecked
+                                onChange={(e) => layerVisible(4, e.target.checked)} />
+                            <label htmlFor="l4">4</label>
+                            <input id="l5" type="checkbox" defaultChecked
+                                onChange={(e) => layerVisible(5, e.target.checked)} />
+                            <label htmlFor="l5">5</label>
+                        </div>
+                        <div className="col">
+                            <div className="row justify-content-left pt-1" id="legend" style={{ paddingLeft: "20px" }}>
+                                <img src={Legend} style={{ width: "70%" }}></img>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
