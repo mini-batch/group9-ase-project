@@ -45,6 +45,10 @@ class PyramidLayer {
     get(x, y) {
         return this.matrix[x][y];
     }
+
+    /*getColor(x, y) {
+        return this.matrix[x][y].color;
+    }*/
 }
 
 class Pyramid {

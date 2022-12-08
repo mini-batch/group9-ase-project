@@ -7,10 +7,12 @@ import { generate_headers, populate_problem_matrix3D, reduce_problem_matrix } fr
 import { create_dicts } from "../Logic/PolysphereLogic/Create_dict_objects";
 import { solve } from "../Logic/PolysphereLogic/Solver";
 import { getShape } from "../Logic/PolyPyramidLogic/Shapes3D"
+import {Color} from "three";
 
 // 创建一个五层金字塔
-let worker = new Pyramid(5, 1);
+export let worker = new Pyramid(5, 1);
 const scene = new Scene();
+
 
 const FPS = 30;
 let uiTimer = null;
@@ -44,6 +46,12 @@ const Colours = {
     "L": 0x00bfff
 }
 
+// Change the color value stored in matrix
+export function setSphereColor(x, y, layer, color) {
+    worker.layers[layer][x][y].color.set(color);
+    console.log("Hi");
+    console.log(worker.layers[layer][x][y].color);
+} 
 
 function renderPyramid() {
     for (let i = 0; i < worker.layers.length; i++) {
@@ -65,6 +73,37 @@ function renderPyramid() {
             }
         }
     }
+}
+
+function getInputPosition() {
+    let input_shapes = [];
+    let input_coords = [];
+    for (let i = 0; i < worker.layers.length; i++) {
+        const spheres = worker.layers[i].matrix;
+        for (let x = 0; x < worker.layers[i].size; x++) {
+            for (let y = 0; y < worker.layers[i].size; y++) {
+                // If sphere not black
+                console.log(spheres[x][y].material.color === 0x233333);
+                //console.log(spheres[x][y] == "2306867");
+                if (spheres[x][y].color !== 0x233333) {
+                    console.log("HI");
+                    // Get shape name based on colour
+                    let shape_name = Object.keys(Colours).find(key => Colours[key] === spheres[x][y].color);
+                    if (!(input_shapes.includes(shape_name))) {
+                        // Add shape if not already added
+                        input_shapes.push(shape_name);
+                        // Add array for shape coords
+                        input_coords.push([[x, y, i]]);
+                    }
+                    else {
+                        // Add coordinate
+                        input_coords[input_coords.indexOf(shape_name)].push([x, y, i]);
+                    }                    
+                }
+            }
+        }
+    }
+    return [input_shapes, input_coords]
 }
 
 function disposePyramid() {
@@ -90,12 +129,14 @@ function layerVisible(idx, v) {
         for (let y = 0; y < layer.size; y++) {
             if (spheres[x][y].userData) {
                 spheres[x][y].userData.visible = v;
+                spheres[x][y].visible = v;
                 spheres[x][y].userData.needsUpdate = true;
                 console.log("?")
             }
         }
     }
 }
+
 
 let input;
 let input_shapes;
@@ -104,7 +145,7 @@ let problem_mat;
 let problem_def;
 let headers;
 let dicts;
-class PolyPyramid extends React.Component {
+export class PolyPyramid extends React.Component {
     constructor(props) {
         super(props);
         this.panel = createRef();
@@ -121,6 +162,8 @@ class PolyPyramid extends React.Component {
             solutions: []
         }
     }
+
+    
 
     // Used to draw solution pyramid (position output from backend)
     drawPosition(position) {
@@ -153,9 +196,9 @@ class PolyPyramid extends React.Component {
 
         // get inputs
         // parseInt(this.inputRef.inputX);
-        console.log(getShape(this.inputRef.shape.current.value));
 
-        input = [["A"], [[[0, 0, 4], [1, 1, 3], [2, 2, 2], [2, 2, 1], [0, 0, 3]]]];
+        input = getInputPosition();//[["A"], [[[0, 0, 4], [1, 1, 3], [2, 2, 2], [2, 2, 1], [0, 0, 3]]]];
+        console.log(input);
         input_shapes = input[0];
         input_squares = input[1];
         problem_mat = populate_problem_matrix3D();
@@ -291,4 +334,4 @@ class PolyPyramid extends React.Component {
     }
 }
 
-export default PolyPyramid;
+
