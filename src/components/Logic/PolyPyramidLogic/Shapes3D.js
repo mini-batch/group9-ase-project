@@ -52,4 +52,17 @@ let L = new Shape3D("L", [[0, 0, 0], [0, 1, 0],
                                                 [2, 2, 0]
                 ]);
 
+export let shapeStore = {
+    "A": A,
+    "B": B,
+    "C": C,
+    "D": D,
+    "E": E,
+    "F": F,
+    "G": G,
+    "H": H,
+    "I": I,
+    "J": J,
+    "K": K
+};
 export { A, B, C, D, E, F, G, H, I, J, K, L };

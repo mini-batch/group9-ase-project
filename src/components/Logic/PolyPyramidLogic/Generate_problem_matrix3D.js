@@ -164,7 +164,6 @@ export function convert_rect_coords_to_diags(shape_layout, size) {
         out[count] = layout;
         count += 1;
     }
-    console.log(out);
     return out;
 }
 

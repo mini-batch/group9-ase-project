@@ -1,8 +1,9 @@
 
 // Option 2: Import just the parts you need.
+import { useState } from 'react';
 import {
     Scene, PerspectiveCamera, AmbientLight, PointLightHelper, WebGLRenderer, PointLight,
-    SphereGeometry, MeshPhongMaterial, Mesh, PlaneGeometry, Color, PCFSoftShadowMap, Raycaster, Vector2, Vector3, RectAreaLight
+    SphereGeometry, MeshPhongMaterial, Mesh, PlaneGeometry, Color, PCFSoftShadowMap, Raycaster, Vector2, Vector3, RectAreaLight, AxesHelper
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { setSphereColor, worker } from './PolyPyramidUI';
@@ -16,7 +17,6 @@ light.castShadow = true;
 const helper = new PointLightHelper(light, 2);
 scene.add(light);
 scene.add(helper);
-// light.lookAt(0, 0, 0);
 light.intensity = 1;
 light.position.set(0, 0, 1).normalize();
 const renderer = new WebGLRenderer({ antialias: true });
@@ -25,6 +25,32 @@ renderer.shadowMap.type = PCFSoftShadowMap;
 renderer.setClearColor(0xffffff);
 renderer.setPixelRatio(window.devicePixelRatio);
 let resizeObeserver;
+
+export let inputShapes = {
+    get() {
+        return this.store;
+    },
+    add(shape_name) {
+        this.store.push(shape_name);
+    },
+    clear() {
+        this.store = [];
+    },
+    store:[]
+};
+
+export let inputCoords = {
+    get() {
+        return this.store;
+    },
+    add(coord) {
+        this.store.push(coord);
+    },
+    clear() {
+        this.store = [];
+    },
+    store:[]
+};
 
 const Colours = {
     "A": 0xff0000,
@@ -42,13 +68,15 @@ const Colours = {
 }
 
 export function initScene(canvas) {
+    //const axesHelper = new AxesHelper( 5 );
+    //scene.add( axesHelper );
     camera.fov = 45;
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.near = 0.2;
     camera.far = 300;
-    //camera.45, canvas.clientWidth / canvas.clientHeight, 0.2, 300);
-    camera.position.z = 4;
-    camera.position.y = 4;
+    camera.position.z = 18;
+    camera.position.x = -15
+    camera.position.y = 9;
     camera.addEventListener('onCameraChange', (e) => {
         console.log('change');
     })
@@ -72,7 +100,33 @@ export function initScene(canvas) {
     controls.target = new Vector3(5, 3.8, 5);
     controls.maxPolarAngle = Math.PI / 2;
 
-    
+    function arrayCoordsFromWorldCoords(x, y, height) {
+        let layer = Math.round((height - 1) / Math.sqrt(2));
+        let x_index;
+        let y_index;
+        if (layer % 2 === 1) {
+            x_index = (x - 1 - 1 * layer) / 2;
+            y_index = (y - 1 - 1 * layer) / 2;
+        }
+        else {
+            x_index = (x - 1 - 1 * layer) / 2;
+            y_index = (y - 1 - 1 * layer) / 2;
+        }
+        return [x_index, y_index, layer];
+    }
+
+    function setInput (shape, coord) {
+        if (!(inputShapes.get().includes(shape))) {
+            // Add shape if not already added
+            inputShapes.add(shape);
+            // Add array for shape coords
+            inputCoords.add(new Array(coord));
+        }
+        else {
+            // Add coordinate
+            inputCoords.get()[inputShapes.get().indexOf(shape)].push(coord);
+        }                    
+    }
 
     const raycaster = new Raycaster();
     const pointer = new Vector2();
@@ -81,13 +135,25 @@ export function initScene(canvas) {
         pointer.y = - ((event.clientY - canvas.offsetTop) / canvas.clientHeight) * 2 + 1;
         raycaster.setFromCamera(pointer, camera);
         let shape = document.getElementById("inputShape").value
+        if (shape === "") {
+            // If no input shape, abort.
+            return;
+        }
         const intersects = raycaster.intersectObjects(scene.children);
         for (let i = 0; i < intersects.length; i++) {
             if (intersects[i].object.visible === true) {
+                // Get only visibile objects
                 if (intersects[i].object.name[0] === "s") {
-                    intersects[i].object.material.color.set(Colours[shape]);
-                    //setSphereColor(0,0,0, Colours[shape]);
-                    break;
+                    // Get only sphere's
+                    if (intersects[i].object.material.color.equals(new Color(0x233333))) {
+                        // Get only empty spheres (colour = black)
+                        intersects[i].object.material.color.set(Colours[shape]);
+                        let coord = arrayCoordsFromWorldCoords(intersects[i].object.position.x, intersects[i].object.position.z, intersects[i].object.position.y);
+                        setInput(shape, coord);
+                        console.log(inputShapes.get());
+                        console.log(inputCoords.get());
+                        break;
+                    }
                 }
             }
         }
@@ -135,8 +201,6 @@ function createSphere(x, y, z, color, radius, segs) {
     sphere.castShadow = true;
     sphere.receiveShadow = true;
     sphere.name = ["s", x, y, z].join(",");
-    console.log(sphere.name);
-
     return sphere;
 }
 

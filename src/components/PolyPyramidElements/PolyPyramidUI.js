@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef, createRef } from "react";
 import "./PolyPyramidUI.css";
-import Scene from "./PolyPyramidScene"
+import Scene, { inputShapes, inputCoords } from "./PolyPyramidScene"
 import Pyramid from './Pyramid'
 import { convert_to_pyramid_layers } from "../Logic/PolyPyramidLogic/ConvertSolutionFormat";
 import { generate_headers, populate_problem_matrix3D, reduce_problem_matrix } from "../Logic/PolyPyramidLogic/Generate_problem_matrix3D";
 import { create_dicts } from "../Logic/PolysphereLogic/Create_dict_objects";
 import { solve } from "../Logic/PolysphereLogic/Solver";
-import { getShape } from "../Logic/PolyPyramidLogic/Shapes3D"
-import {Color} from "three";
+import { shapeStore } from "../Logic/PolyPyramidLogic/Shapes3D.js";
+import Legend from '../../Images/ShapeLegend.png';
 
 // 创建一个五层金字塔
 export let worker = new Pyramid(5, 1);
@@ -62,8 +62,7 @@ function renderPyramid() {
                 let color = spheres[x][y].color;
 
                 if (!spheres[x][y].userData) {
-                    spheres[x][y].userData =
-                        scene.createSphere(pos[0], pos[1], pos[2], color, worker.radius());
+                    spheres[x][y].userData = scene.createSphere(pos[0], pos[1], pos[2], color, worker.radius());
                     scene.add(spheres[x][y].userData);
                 } else {
                     spheres[x][y].userData.material.color.set(color);
@@ -73,37 +72,6 @@ function renderPyramid() {
             }
         }
     }
-}
-
-function getInputPosition() {
-    let input_shapes = [];
-    let input_coords = [];
-    for (let i = 0; i < worker.layers.length; i++) {
-        const spheres = worker.layers[i].matrix;
-        for (let x = 0; x < worker.layers[i].size; x++) {
-            for (let y = 0; y < worker.layers[i].size; y++) {
-                // If sphere not black
-                console.log(spheres[x][y].material.color === 0x233333);
-                //console.log(spheres[x][y] == "2306867");
-                if (spheres[x][y].color !== 0x233333) {
-                    console.log("HI");
-                    // Get shape name based on colour
-                    let shape_name = Object.keys(Colours).find(key => Colours[key] === spheres[x][y].color);
-                    if (!(input_shapes.includes(shape_name))) {
-                        // Add shape if not already added
-                        input_shapes.push(shape_name);
-                        // Add array for shape coords
-                        input_coords.push([[x, y, i]]);
-                    }
-                    else {
-                        // Add coordinate
-                        input_coords[input_coords.indexOf(shape_name)].push([x, y, i]);
-                    }                    
-                }
-            }
-        }
-    }
-    return [input_shapes, input_coords]
 }
 
 function disposePyramid() {
@@ -184,6 +152,15 @@ export class PolyPyramid extends React.Component {
         renderPyramid();
     }
 
+    checkInput(shapes, coords) {
+        for (let i = 0; i < shapes.length; i++) {
+            if (shapeStore[shapes[i]].layout.length !== coords[i].length) {
+                // Wrong number of spheres for shape, abort.
+                return false;
+            }
+        }
+        return true;
+    }
 
     onSolveButtonClick() {
         this.setState({
@@ -191,21 +168,16 @@ export class PolyPyramid extends React.Component {
             solutions: [],
             stopExecution: false
         })
-        //console.log(convert_inBoard_to_arrays());
-        //input = convert_inBoard_to_arrays();
-
-        // get inputs
-        // parseInt(this.inputRef.inputX);
-
-        input = getInputPosition();//[["A"], [[[0, 0, 4], [1, 1, 3], [2, 2, 2], [2, 2, 1], [0, 0, 3]]]];
-        console.log(input);
-        input_shapes = input[0];
-        input_squares = input[1];
+        input_shapes = inputShapes.get();
+        input_squares = inputCoords.get();
+        // If incorrect number of spheres for shape, abort.
+        if (!this.checkInput(input_shapes, input_squares)) {
+            return;
+        }
         problem_mat = populate_problem_matrix3D();
         problem_def = reduce_problem_matrix(problem_mat, generate_headers(problem_mat), input_shapes, input_squares);
         problem_mat = problem_def[0];
         headers = problem_def[1];
-        //headers = generate_headers(problem_mat);
         dicts = create_dicts(problem_mat, headers);
         let ret = solve(dicts[0], dicts[1]);
         let cnt = 0;
@@ -230,6 +202,8 @@ export class PolyPyramid extends React.Component {
     }
 
     onClearButtonClick() {
+        inputShapes.clear();
+        inputCoords.clear();
         this.setState({
             solutions: [],
             solutionCount: 0
@@ -258,15 +232,6 @@ export class PolyPyramid extends React.Component {
     componentDidMount() {
         scene.init(this.panel.current);
         renderPyramid();
-
-        // 第五层的第 x, y 个球变成 0xee1166
-        /*worker.getLayer(5).set(0, 0, 0xee1166)
-        worker.getLayer(1).set(0, 0, 0x7788ff)
-        worker.getLayer(3).set(2, 1, 0x88ffcc)
-        worker.getLayer(4).set(0, 1, 0x88cfcc)
-        worker.getLayer(4).set(1, 3, 0xffffcc)
-        // 渲染金字塔*/
-        //renderPyramid();
     }
 
     componentWillUnmount() {
@@ -288,7 +253,7 @@ export class PolyPyramid extends React.Component {
                     <div ref={this.panel} className="panel">
                     </div>
                 </div>
-                <form id="positionInputForm" style={{ paddingTop: "10px" }}>
+                <form id="positionInputForm" style={{ paddingBottom: "4px" }}>
                     <button type="button" onClick={() => this.onSolveButtonClick()}>Solve</button>
                     <button type="button" onClick={() => this.onNextButtonClick()}>Display Next</button>
                     <button type="button" onClick={() => this.onClearButtonClick()}>Clear</button>
@@ -296,22 +261,8 @@ export class PolyPyramid extends React.Component {
                 </form>
                 <label htmlFor="inputShape">Shape</label>
                 <input ref={this.inputRef.shape} id="inputShape" type="text"
-                    onKeyUp={(e) => { e.target.value = e.target.value.replace(/[^A-L]/g, ''); }} defaultValue="A">
+                    onKeyUp={(e) => { e.target.value = e.target.value.replace(/[^A-La-l]/g, '').toUpperCase(); }} defaultValue="A">
                 </input>
-                <label htmlFor="inputX">X</label>
-                <input ref={this.inputRef.inputX} id="inputX" type="text"
-                    onKeyUp={(e) => { e.target.value = e.target.value.replace(/[^0-4]/g, ''); }} defaultValue="0">
-                </input>
-                <label htmlFor="inputY">Y</label>
-                <input ref={this.inputRef.inputY} id="inputY" type="text"
-                    onKeyUp={(e) => { e.target.value = e.target.replace(/[^0-4]/g, ''); }} defaultValue="0">
-                </input>
-                <label htmlFor="inputZ">Z</label>
-                <input ref={this.inputRef.inputZ} id="inputZ" type="text"
-                    onKeyUp={(e) => { e.target.value = e.target.value.replace(/[^1-5]/g, ''); }} defaultValue="5">
-                </input>
-                <button type="button" onClick={() => this.onInputClick()}>Set</button>
-
 
                 <p>Number of solutions: {this.state.solutionCount}</p>
                 <input id="l1" type="checkbox" defaultChecked
@@ -329,6 +280,9 @@ export class PolyPyramid extends React.Component {
                 <input id="l5" type="checkbox" defaultChecked
                     onChange={(e) => layerVisible(5, e.target.checked)} />
                 <label htmlFor="l5">5</label>
+                <div className="row justify-content-left pt-1" id="legend" style={{ paddingLeft: "20px" }}>
+                    <img src={Legend} style={{width:"19%"}}></img>
+                </div>
             </div>
         )
     }

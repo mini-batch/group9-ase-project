@@ -195,7 +195,7 @@ function Polysphere() {
                     </div>
                 <div className="row align-items-center justify-content-center pt-1" id="legend">
                     <img src={Legend} style={{width:"40%"}}></img>
-                    </div>
+                </div>
             </div>
             <div className="container-fluid">
                 <div className="row board">
