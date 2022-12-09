@@ -5,7 +5,8 @@ import {
     Navigation,
     NQueens,
     Home,
-    Polysphere
+    Polysphere,
+    PolyPyramid
 } from "./components"
 import "./index.css"
 
@@ -14,6 +15,7 @@ root.render(
     <Router>
         <Navigation />
         <Routes>
+            <Route path={process.env.PUBLIC_URL + '/polysphere-pyramid-puzzle'} element={<PolyPyramid />} />
             <Route path={process.env.PUBLIC_URL + '/polysphere-puzzle'} element={<Polysphere />} />
             <Route path={process.env.PUBLIC_URL + '/n-queens-problem'} element={<NQueens />} />
             <Route path={process.env.PUBLIC_URL + '/'} element={<Home />} />

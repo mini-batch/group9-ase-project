@@ -15,6 +15,7 @@ function Navigation() {
                         <Nav.Link as={Link} to={process.env.PUBLIC_URL + '/'}>Home</Nav.Link>
                         <Nav.Link as={Link} to={process.env.PUBLIC_URL + '/n-queens-problem'}>N Queens Problem</Nav.Link>
                         <Nav.Link as={Link} to={process.env.PUBLIC_URL + '/polysphere-puzzle'}>Polysphere Puzzle</Nav.Link>
+                        <Nav.Link as={Link} to={process.env.PUBLIC_URL + '/polysphere-pyramid-puzzle'}>Polysphere Pyramid Puzzle</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./NQueensUI.css";
-import Queen from '../Images/queen.svg';
-import { GetSolutionBruteForce } from "./Logic/NQueensLogic.js";
-import Warning from "./Warning";
+import Queen from '../../Images/queen.svg';
+import { GetSolutionBruteForce } from ".././Logic/NQueensLogic.js";
+import Warning from ".././Warning";
 
 function NQueens() {
     document.body.style.backgroundColor = 'rgba(182, 122, 11, 0.342)';

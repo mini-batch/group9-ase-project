@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { create_dicts } from "./Logic/PolysphereLogic/Create_dict_objects.js";
-import { convert_to_5x11 } from "./Logic/PolysphereLogic/Create_solution.js";
-import { generate_headers, populate_problem_matrix, reduce_problem_matrix } from "./Logic/PolysphereLogic/Generate_problem_matrix.js";
-import { solve, sets, items } from "./Logic/PolysphereLogic/Solver.js";
+import { create_dicts } from "../Logic/PolysphereLogic/Create_dict_objects.js";
+import { convert_to_5x11 } from "../Logic/PolysphereLogic/Create_solution.js";
+import { generate_headers, populate_problem_matrix, reduce_problem_matrix } from "../Logic/PolysphereLogic/Generate_problem_matrix.js";
+import { solve, sets, items } from "../Logic/PolysphereLogic/Solver.js";
 import "./PolysphereUI.css";
-import Legend from '../Images/ShapeLegend.png';
+import Legend from '../../Images/ShapeLegend.png';
 
 const FPS = 144;
 let uiTimer = null;
@@ -123,9 +123,9 @@ function Polysphere() {
         return b;
     }
 
-    function onLoadButtonClick() {
-        drawOutBoard();
-    };
+    function onNextButtonClick() {
+        drawPosition(solutions.pop());
+    }
 
     let input;
     let input_shapes;
@@ -163,20 +163,20 @@ function Polysphere() {
             drawPosition(convert_to_5x11(arr, problem_mat, headers, input_shapes, input_squares));
         });
     };
-
-    function onNextButtonClick() {
-        drawPosition(solutions.pop());
-    }
-
     function onClearButtonClick() {
         setSolutions([]);
         setSolutionCount(0);
         clearPosition();
     };
 
+
     function onStopButtonClick() {
         stopExecution.current = true;
+        console.log(stopExecution.current);
+        clearInterval(uiTimer);
+        uiTimer = null;
     }
+
 
     return (
         <div className="home">
@@ -185,14 +185,14 @@ function Polysphere() {
                     <h1>
                         Polysphere Puzzle
                     </h1>
-                    <form id="positionInputForm" style={{paddingTop:"10px"}}>
+                    <form id="positionInputForm"style={{paddingTop:"10px"}}>
                         <button type="button" onClick={() => onSolveButtonClick()}>Solve</button>
-                        <button type="button" onClick={() => onNextButtonClick()}>Display Next</button>
                         <button type="button" onClick={() => onClearButtonClick()}>Clear</button>
-                        <button type="button" disabled onClick={() => onStopButtonClick()}>Stop</button>
+                        <button type="button" onClick={() => onStopButtonClick()}>Stop</button>
+                        <button type="button" onClick={() => onNextButtonClick()}>Display Next</button>
                         <p>Number of solutions: {solutionCount}</p>
                     </form>
-                </div>
+                    </div>
                 <div className="row align-items-center justify-content-center pt-1" id="legend">
                     <img src={Legend} style={{width:"40%"}}></img>
                 </div>
@@ -200,10 +200,12 @@ function Polysphere() {
             <div className="container-fluid">
                 <div className="row board">
                     <div className="boardContainer">
-                            {inBoard}
+                        {inBoard}
                     </div>
-                    <div className="boardContainer">
-                            {outBoard}
+                </div>
+                <div className="row board">
+                    <div id="resultBoard" className="boardContainer">
+                        {outBoard}
                     </div>
                 </div>
             </div>
