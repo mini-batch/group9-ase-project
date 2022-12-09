@@ -269,22 +269,21 @@ export function populate_problem_matrix3D() {
 // Function to remove columns and rows corresponding to a given starting position: shapes_used = array with shape letters, squares_used = array of array of square coords.
 // problem_matrix and problem_headers are produced from assuming empty starting position
 export function reduce_problem_matrix (problem_matrix, problem_headers, shapes_used, squares_used, isFourLevel) {
-    let bottom_layer_headers;
-    if (isFourLevel) {
-        bottom_layer_headers = structuredClone(problem_headers).slice(12,37);
-    }
+    console.log(problem_headers);
     let used_cols = []
     for (let shape of shapes_used) {
         used_cols.push(shape_cols[shape]);
     }
     for (let squares of squares_used) {
         for (let square of squares) {
+            console.log(square);
             used_cols.push(problem_headers.indexOf(square.toString()));
         }
     }
     let used_cols_sorted = new Uint8Array(used_cols);
     used_cols_sorted = used_cols_sorted.sort();
     used_cols_sorted = used_cols_sorted.reverse();
+    console.log(used_cols_sorted);
     for (let i = problem_matrix.length - 1; i >= 0; i--) {
         for (let j of used_cols_sorted) {
             if (problem_matrix[i][j] && used_cols_sorted.includes(j)) {
@@ -301,7 +300,7 @@ export function reduce_problem_matrix (problem_matrix, problem_headers, shapes_u
         problem_headers.splice(i, 1);
     }
     if (isFourLevel) {
-        for (let i = 12; i < 37; i++) {
+        for (let i = 36 - shapes_used.length - squares_used.length; i >= 12 - shapes_used.length; i--) {
             // Remove rows that include bottom layer
             for (let j = problem_matrix.length - 1; j >= 0; j--) {
                 if (problem_matrix[j][i] === 1) {
@@ -309,13 +308,14 @@ export function reduce_problem_matrix (problem_matrix, problem_headers, shapes_u
                 }
             }
         }
-        for (let i = 36; i > 11; i--) {
+        for (let i = 36 - shapes_used.length - squares_used.length; i > 11 - shapes_used.length; i--) {
             // Remove columns relating to bottom layer
             for (let j = problem_matrix.length - 1; j >= 0; j--) {
                 problem_matrix[j].splice(i, 1);
             }
         }
-        problem_headers.splice(12,25);
+        console.log(problem_headers);
+        problem_headers.splice(12 - shapes_used.length, 25);
     }
     return [problem_matrix, problem_headers]
 }

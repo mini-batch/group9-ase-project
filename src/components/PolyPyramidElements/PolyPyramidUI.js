@@ -194,16 +194,36 @@ export class PolyPyramid extends React.Component {
         if (!this.checkInput(input_shapes, input_squares)) {
             return;
         }
+
         problem_mat = populate_problem_matrix3D();
         problem_def = reduce_problem_matrix(problem_mat, generate_headers(problem_mat), input_shapes, input_squares, this.state.isFourLevel);
         problem_mat = problem_def[0];
+        /*
+        let test = 0;
+        for (let i of problem_mat) {
+            //console.log(i);
+            if (i[0] === 1) {
+                for (let j = 12; j < 37; j++) {
+                    if (i[j] !== 0) {
+                        break;
+                    }
+                    if (j === 36) {
+                        console.log(i);
+                        test += 1;
+                    }
+                }
+            }
+        }*/
+        //console.log(test);
         headers = problem_def[1];
         console.log(problem_mat);
         console.log(headers);
         dicts = create_dicts(problem_mat, headers, this.state.isFourLevel);
+        console.log(Object.keys(dicts[0]).length);
         console.log(dicts[0]);
         console.log(dicts[1]);
-        let ret = solve(dicts[0], dicts[1]);
+        console.log(headers);
+        let ret = solve(dicts[0], dicts[1], [], this.state.isFourLevel, headers);
         let cnt = 0;
         createTimer(() => {
             let arr = ret.next().value;
