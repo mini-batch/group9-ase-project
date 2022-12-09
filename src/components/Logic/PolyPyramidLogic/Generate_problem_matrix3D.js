@@ -186,7 +186,7 @@ export let diags = get_diag_slices();
 export function add_rows_for_shape_in_horizontal_and_vertical_slices(prob_mat, shape) {
     // Determine shape size and which slices it can fit into
     let max_size = 0
-    for (let i in shape.layout) {
+    for (let i of shape.layout) {
         if (i[0] > max_size) {
             max_size = i[0]
         }
@@ -301,17 +301,18 @@ export function reduce_problem_matrix (problem_matrix, problem_headers, shapes_u
         problem_headers.splice(i, 1);
     }
     if (isFourLevel) {
-        for (let i = 0; i < 25; i++) {
-            let index = problem_headers.indexOf(bottom_layer_headers[i]);
+        for (let i = 12; i < 37; i++) {
             // Remove rows that include bottom layer
-            for (let j = 0; j < problem_matrix.length; j++) {
-                if (problem_matrix[j][index] === 1) {
+            for (let j = problem_matrix.length - 1; j >= 0; j--) {
+                if (problem_matrix[j][i] === 1) {
                     problem_matrix.splice(j, 1);
                 }
             }
+        }
+        for (let i = 36; i > 11; i--) {
             // Remove columns relating to bottom layer
-            for (let j = 0; j < problem_matrix.length; j++) {
-                problem_matrix[j].splice(index, 1);
+            for (let j = problem_matrix.length - 1; j >= 0; j--) {
+                problem_matrix[j].splice(i, 1);
             }
         }
         problem_headers.splice(12,25);
