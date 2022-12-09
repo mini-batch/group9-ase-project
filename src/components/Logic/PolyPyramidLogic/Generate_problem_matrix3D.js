@@ -268,7 +268,11 @@ export function populate_problem_matrix3D() {
 
 // Function to remove columns and rows corresponding to a given starting position: shapes_used = array with shape letters, squares_used = array of array of square coords.
 // problem_matrix and problem_headers are produced from assuming empty starting position
-export function reduce_problem_matrix (problem_matrix, problem_headers, shapes_used, squares_used) {
+export function reduce_problem_matrix (problem_matrix, problem_headers, shapes_used, squares_used, isFourLevel) {
+    let bottom_layer_headers;
+    if (isFourLevel) {
+        bottom_layer_headers = structuredClone(problem_headers).slice(12,37);
+    }
     let used_cols = []
     for (let shape of shapes_used) {
         used_cols.push(shape_cols[shape]);
@@ -278,7 +282,6 @@ export function reduce_problem_matrix (problem_matrix, problem_headers, shapes_u
             used_cols.push(problem_headers.indexOf(square.toString()));
         }
     }
-    //console.log(used_cols);
     let used_cols_sorted = new Uint8Array(used_cols);
     used_cols_sorted = used_cols_sorted.sort();
     used_cols_sorted = used_cols_sorted.reverse();
@@ -296,6 +299,22 @@ export function reduce_problem_matrix (problem_matrix, problem_headers, shapes_u
     }
     for (let i of used_cols_sorted) {
         problem_headers.splice(i, 1);
+    }
+    if (isFourLevel) {
+        for (let i = 0; i < 25; i++) {
+            let index = problem_headers.indexOf(bottom_layer_headers[i]);
+            // Remove rows that include bottom layer
+            for (let j = 0; j < problem_matrix.length; j++) {
+                if (problem_matrix[j][index] === 1) {
+                    problem_matrix.splice(j, 1);
+                }
+            }
+            // Remove columns relating to bottom layer
+            for (let j = 0; j < problem_matrix.length; j++) {
+                problem_matrix[j].splice(index, 1);
+            }
+        }
+        problem_headers.splice(12,25);
     }
     return [problem_matrix, problem_headers]
 }

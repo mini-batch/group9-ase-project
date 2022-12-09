@@ -51,7 +51,7 @@ export function setSphereColor(x, y, layer, color) {
     worker.layers[layer][x][y].color.set(color);
     console.log("Hi");
     console.log(worker.layers[layer][x][y].color);
-} 
+}
 
 function renderPyramid() {
     for (let i = 0; i < worker.layers.length; i++) {
@@ -127,11 +127,12 @@ export class PolyPyramid extends React.Component {
         this.state = {
             stopExecution: false,
             solutionCount: 0,
-            solutions: []
+            solutions: [],
+            isFourLevel: false,
         }
     }
 
-    
+
 
     // Used to draw solution pyramid (position output from backend)
     drawPosition(position) {
@@ -162,6 +163,25 @@ export class PolyPyramid extends React.Component {
         return true;
     }
 
+    onFourLevelCheckChange() {
+        this.setState({ isFourLevel: !this.state.isFourLevel }, () => this.onFourLevelStateChange());
+    }
+
+    onFourLevelStateChange() {
+        if (this.state.isFourLevel) {
+            document.getElementById("l5").checked = false;
+            document.getElementById("l5").disabled = true;
+            layerVisible(5, false);
+            this.onClearButtonClick();
+        }
+        else {
+            document.getElementById("l5").checked = true;
+            document.getElementById("l5").disabled = false;
+            layerVisible(5, true);
+            this.onClearButtonClick();
+        }
+    }
+
     onSolveButtonClick() {
         this.setState({
             solutionCount: 0,
@@ -175,14 +195,19 @@ export class PolyPyramid extends React.Component {
             return;
         }
         problem_mat = populate_problem_matrix3D();
-        problem_def = reduce_problem_matrix(problem_mat, generate_headers(problem_mat), input_shapes, input_squares);
+        problem_def = reduce_problem_matrix(problem_mat, generate_headers(problem_mat), input_shapes, input_squares, this.state.isFourLevel);
         problem_mat = problem_def[0];
         headers = problem_def[1];
-        dicts = create_dicts(problem_mat, headers);
+        console.log(problem_mat);
+        console.log(headers);
+        dicts = create_dicts(problem_mat, headers, this.state.isFourLevel);
+        console.log(dicts[0]);
+        console.log(dicts[1]);
         let ret = solve(dicts[0], dicts[1]);
         let cnt = 0;
         createTimer(() => {
             let arr = ret.next().value;
+            console.log(arr);
             if (!arr) {
                 clearInterval(uiTimer);
                 uiTimer = null;
@@ -253,16 +278,19 @@ export class PolyPyramid extends React.Component {
                     <div ref={this.panel} className="panel">
                     </div>
                 </div>
-                <div className="container" style={{paddingTop:"10px"}}>
+                <div className="container" style={{ paddingTop: "10px" }}>
                     <div className="row">
                         <div className="col">
+                            <input id="isFourCheck" type="checkbox"
+                                onChange={() => this.onFourLevelCheckChange()} />
+                            <label htmlFor="isFourCheck">4 Level Pyramid</label>
                             <form id="positionInputForm" style={{ paddingBottom: "4px" }}>
-                                <button type="button" style={{marginLeft: "3px", marginRight:"3px"}} onClick={() => this.onSolveButtonClick()}>Solve</button>
-                                <button type="button" style={{marginLeft: "3px", marginRight:"3px"}} onClick={() => this.onNextButtonClick()}>Display Next</button>
-                                <button type="button" style={{marginLeft: "3px", marginRight:"3px"}} onClick={() => this.onClearButtonClick()}>Clear</button>
-                                <button type="button" style={{marginLeft: "3px", marginRight:"3px"}} onClick={() => this.onStopButtonClick()}>Stop</button>
+                                <button type="button" style={{ marginLeft: "3px", marginRight: "3px" }} onClick={() => this.onSolveButtonClick()}>Solve</button>
+                                <button type="button" style={{ marginLeft: "3px", marginRight: "3px" }} onClick={() => this.onNextButtonClick()}>Display Next</button>
+                                <button type="button" style={{ marginLeft: "3px", marginRight: "3px" }} onClick={() => this.onClearButtonClick()}>Clear</button>
+                                <button type="button" style={{ marginLeft: "3px", marginRight: "3px" }} onClick={() => this.onStopButtonClick()}>Stop</button>
                             </form>
-                            <label htmlFor="inputShape" style={{paddingRight:"3px"}}>Shape</label>
+                            <label htmlFor="inputShape" style={{ paddingRight: "3px" }}>Shape</label>
                             <input ref={this.inputRef.shape} id="inputShape" type="text"
                                 onKeyUp={(e) => { e.target.value = e.target.value.replace(/[^A-La-l]/g, '').toUpperCase(); }} defaultValue="A">
                             </input>

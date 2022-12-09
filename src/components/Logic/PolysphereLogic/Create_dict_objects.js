@@ -1,7 +1,7 @@
 import { generate_headers } from "./Generate_problem_matrix";
 
 
-function create_dicts(problem_matrix_reduced, headers_reduced) {
+function create_dicts(problem_matrix_reduced, headers_reduced, isFourLevel) {
     let X = {};
     let Y = {};
     for (let i = 0; i < problem_matrix_reduced.length; i++) {
